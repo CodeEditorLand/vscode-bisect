@@ -19,24 +19,24 @@
     "watch": "tsc -watch -p ./"
   },
   "dependencies": {
-    "@vscode/vscode-perf": "^0.0.6",
-    "chalk": "^4.x",
-    "cli-progress": "^3.11.2",
-    "commander": "^9.4.0",
-    "fflate": "^0.7.4",
-    "follow-redirects": "^1.15.4",
-    "open": "^8.4.0",
-    "playwright": "^1.29.2",
-    "prompts": "^2.4.2",
-    "simple-git": "^3.16.0",
-    "tree-kill": "^1.2.2",
-    "vscode-uri": "^3.0.7"
+    "@vscode/vscode-perf": "0.0.6",
+    "chalk": "4.x",
+    "cli-progress": "3.11.2",
+    "commander": "9.4.0",
+    "fflate": "0.7.4",
+    "follow-redirects": "1.15.4",
+    "open": "8.4.0",
+    "playwright": "1.29.2",
+    "prompts": "2.4.2",
+    "simple-git": "3.16.0",
+    "tree-kill": "1.2.2",
+    "vscode-uri": "3.0.7"
   },
   "devDependencies": {
-    "@types/cli-progress": "^3.11.0",
-    "@types/follow-redirects": "^1.14.4",
+    "@types/cli-progress": "3.11.0",
+    "@types/follow-redirects": "1.14.4",
     "@types/node": "18.x",
-    "@types/prompts": "^2.0.14",
+    "@types/prompts": "2.0.14",
     "typescript": "4.8.x"
   },
   "authors": "microsoft"
