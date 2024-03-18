@@ -26,24 +26,24 @@
         "node": ">= 16"
     },
     "dependencies": {
-        "@vscode/vscode-perf": "^0.0.15",
-        "chalk": "^5.x",
-        "cli-progress": "^3.12.0",
-        "commander": "^12.0.0",
-        "fflate": "^0.8.2",
-        "follow-redirects": "^1.15.6",
-        "open": "^10.1.0",
-        "playwright": "^1.42.1",
-        "prompts": "^2.4.2",
-        "simple-git": "^3.23.0",
-        "tree-kill": "^1.2.2",
-        "vscode-uri": "^3.0.8"
+        "@vscode/vscode-perf": "0.0.15",
+        "chalk": "5.x",
+        "cli-progress": "3.12.0",
+        "commander": "12.0.0",
+        "fflate": "0.8.2",
+        "follow-redirects": "1.15.6",
+        "open": "10.1.0",
+        "playwright": "1.42.1",
+        "prompts": "2.4.2",
+        "simple-git": "3.23.0",
+        "tree-kill": "1.2.2",
+        "vscode-uri": "3.0.8"
     },
     "devDependencies": {
-        "@types/cli-progress": "^3.11.5",
-        "@types/follow-redirects": "^1.14.4",
+        "@types/cli-progress": "3.11.5",
+        "@types/follow-redirects": "1.14.4",
         "@types/node": "20.x",
-        "@types/prompts": "^2.4.9",
+        "@types/prompts": "2.4.9",
         "typescript": "5.4.x"
     }
 }
