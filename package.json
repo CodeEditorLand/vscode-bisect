@@ -1,49 +1,58 @@
 {
-    "name": "@vscode/vscode-bisect",
-    "version": "0.4.4",
-    "description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/microsoft/vscode-bisect"
-    },
-    "homepage": "https://github.com/microsoft/vscode-bisect",
-    "keywords": [
-        "vscode"
-    ],
-    "bin": {
-        "vscode-bisect": "bin/vscode-bisect"
-    },
-    "license": "MIT",
-    "authors": "microsoft",
-    "main": "out/index",
-    "scripts": {
-        "compile": "tsc -p ./",
-        "build": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "prepare": "npm run build"
-    },
-    "engines": {
-        "node": ">= 16"
-    },
-    "dependencies": {
-        "@vscode/vscode-perf": "0.0.15",
-        "chalk": "5.x",
-        "cli-progress": "3.12.0",
-        "commander": "12.0.0",
-        "fflate": "0.8.2",
-        "follow-redirects": "1.15.6",
-        "open": "10.1.0",
-        "playwright": "1.42.1",
-        "prompts": "2.4.2",
-        "simple-git": "3.23.0",
-        "tree-kill": "1.2.2",
-        "vscode-uri": "3.0.8"
-    },
-    "devDependencies": {
-        "@types/cli-progress": "3.11.5",
-        "@types/follow-redirects": "1.14.4",
-        "@types/node": "20.x",
-        "@types/prompts": "2.4.9",
-        "typescript": "5.4.x"
-    }
+	"name": "@vscode/vscode-bisect",
+	"version": "0.0.1",
+	"private": false,
+	"description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"type": "module",
+	"main": "out/index",
+	"bin": {
+		"vscode-bisect": "bin/vscode-bisect"
+	},
+	"scripts": {
+		"build": "tsc -p ./",
+		"compile": "tsc -p ./",
+		"prepare": "npm run build",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"watch": "tsc -watch -p ./"
+	},
+	"dependencies": {
+		"@vscode/vscode-perf": "0.0.15",
+		"chalk": "5.x",
+		"cli-progress": "3.12.0",
+		"commander": "12.0.0",
+		"fflate": "0.8.2",
+		"follow-redirects": "1.15.6",
+		"open": "10.1.0",
+		"playwright": "1.42.1",
+		"prompts": "2.4.2",
+		"simple-git": "3.23.0",
+		"tree-kill": "1.2.2",
+		"vscode-uri": "3.0.8"
+	},
+	"devDependencies": {
+		"@types/cli-progress": "3.11.5",
+		"@types/follow-redirects": "1.14.4",
+		"@types/node": "20.x",
+		"@types/prompts": "2.4.9",
+		"typescript": "5.4.x",
+		"typescript-esbuild": "latest"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"authors": "microsoft"
 }
