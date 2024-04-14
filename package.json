@@ -1,49 +1,55 @@
 {
-    "name": "@vscode/vscode-bisect",
-    "version": "0.4.5",
-    "description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/microsoft/vscode-bisect"
-    },
-    "homepage": "https://github.com/microsoft/vscode-bisect",
-    "keywords": [
-        "vscode"
-    ],
-    "bin": {
-        "vscode-bisect": "bin/vscode-bisect"
-    },
-    "license": "MIT",
-    "authors": "microsoft",
-    "main": "out/index",
-    "scripts": {
-        "compile": "tsc -p ./",
-        "build": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "prepare": "npm run build"
-    },
-    "engines": {
-        "node": ">= 16"
-    },
-    "dependencies": {
-        "@vscode/vscode-perf": "^0.0.6",
-        "chalk": "^4.x",
-        "cli-progress": "^3.11.2",
-        "commander": "^9.4.0",
-        "fflate": "^0.7.4",
-        "follow-redirects": "^1.15.4",
-        "open": "^8.4.0",
-        "playwright": "^1.29.2",
-        "prompts": "^2.4.2",
-        "simple-git": "^3.16.0",
-        "tree-kill": "^1.2.2",
-        "vscode-uri": "^3.0.7"
-    },
-    "devDependencies": {
-        "@types/cli-progress": "^3.11.0",
-        "@types/follow-redirects": "^1.14.4",
-        "@types/node": "18.x",
-        "@types/prompts": "^2.0.14",
-        "typescript": "4.8.x"
-    }
+	"name": "@vscode/vscode-bisect",
+	"version": "0.0.1",
+	"private": false,
+	"description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+HTTPS://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"author": {
+		"name": "Land",
+		"email": "Land@Playform.Cloud",
+		"url": "HTTPS://Land.Playform.Cloud"
+	},
+	"type": "module",
+	"main": "out/index",
+	"bin": {
+		"vscode-bisect": "bin/vscode-bisect"
+	},
+	"scripts": {
+		"Document": "Document 'Source/**/*.ts'",
+		"build": "tsc -p ./",
+		"compile": "tsc -p ./",
+		"prepare": "npm run build",
+		"prepublishOnly": "Build 'Source/**/*.ts'"
+	},
+	"dependencies": {
+		"chalk": "^4.x",
+		"cli-progress": "^3.11.2",
+		"commander": "^9.4.0",
+		"fflate": "^0.7.4",
+		"follow-redirects": "^1.15.4",
+		"open": "^8.4.0",
+		"prompts": "^2.4.2",
+		"simple-git": "^3.16.0",
+		"tree-kill": "^1.2.2"
+	},
+	"devDependencies": {
+		"@playform/build": "0.0.5",
+		"@playform/document": "0.0.6",
+		"@types/cli-progress": "^3.11.0",
+		"@types/follow-redirects": "^1.14.4",
+		"@types/node": "18.x",
+		"@types/prompts": "^2.0.14"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"authors": "microsoft"
 }
