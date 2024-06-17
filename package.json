@@ -11,13 +11,13 @@
 		"prepare": "npm run build"
 	},
 	"dependencies": {
-		"chalk": "^5.x",
-		"commander": "^12.1.0",
+		"chalk": "^4.x",
+		"commander": "^9.4.0",
 		"fflate": "^0.8.2",
 		"follow-redirects": "^1.15.6",
-		"open": "^10.1.0",
+		"open": "^8.4.0",
 		"prompts": "^2.4.2",
-		"simple-git": "^3.25.0",
+		"simple-git": "^3.16.0",
 		"tree-kill": "^1.2.2"
 	},
 	"devDependencies": {
