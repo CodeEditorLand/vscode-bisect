@@ -11,19 +11,19 @@
 		"prepare": "npm run build"
 	},
 	"dependencies": {
-		"chalk": "^5.x",
-		"commander": "^12.1.0",
-		"fflate": "^0.8.2",
-		"follow-redirects": "^1.15.6",
-		"open": "^10.1.0",
-		"prompts": "^2.4.2",
-		"simple-git": "^3.25.0",
-		"tree-kill": "^1.2.2"
+		"chalk": "5.x",
+		"commander": "12.1.0",
+		"fflate": "0.8.2",
+		"follow-redirects": "1.15.6",
+		"open": "10.1.0",
+		"prompts": "2.4.2",
+		"simple-git": "3.25.0",
+		"tree-kill": "1.2.2"
 	},
 	"devDependencies": {
-		"@types/follow-redirects": "^1.x",
+		"@types/follow-redirects": "1.x",
 		"@types/node": "20.x",
-		"@types/prompts": "^2.x"
+		"@types/prompts": "2.x"
 	},
 	"authors": "microsoft"
 }
