@@ -1,14 +1,7 @@
 {
-	"name": "@vscode/vscode-bisect",
-	"description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
-	"main": "out/index",
+	"authors": "microsoft",
 	"bin": {
 		"vscode-bisect": "bin/vscode-bisect"
-	},
-	"scripts": {
-		"build": "tsc -p ./",
-		"compile": "tsc -p ./",
-		"prepare": "npm run build"
 	},
 	"dependencies": {
 		"chalk": "^4.x",
@@ -20,10 +13,17 @@
 		"simple-git": "^3.16.0",
 		"tree-kill": "^1.2.2"
 	},
+	"description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
 	"devDependencies": {
 		"@types/follow-redirects": "^1.x",
 		"@types/node": "20.x",
 		"@types/prompts": "^2.x"
 	},
-	"authors": "microsoft"
+	"main": "out/index",
+	"name": "@vscode/vscode-bisect",
+	"scripts": {
+		"build": "tsc -p ./",
+		"compile": "tsc -p ./",
+		"prepare": "npm run build"
+	}
 }
