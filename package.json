@@ -1,58 +1,46 @@
 {
-<<<<<<< HEAD
-	"authors": "microsoft",
-	"bin": {
-		"vscode-bisect": "bin/vscode-bisect"
-	},
-	"dependencies": {
-		"chalk": "^4.x",
-		"commander": "^9.4.0",
-		"fflate": "^0.8.2",
-		"follow-redirects": "^1.15.6",
-		"open": "^8.4.0",
-		"prompts": "^2.4.2",
-		"simple-git": "^3.16.0",
-		"tree-kill": "^1.2.2"
-	},
-	"description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
-	"devDependencies": {
-		"@types/follow-redirects": "^1.x",
-		"@types/node": "20.x",
-		"@types/prompts": "^2.x"
-	},
-	"main": "out/index",
-	"name": "@vscode/vscode-bisect",
-=======
-	"name": "@vscode/vscode-bisect",
-	"description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
-	"main": "out/index",
-	"bin": {
-		"vscode-bisect": "bin/vscode-bisect"
-	},
->>>>>>> 3a49bb7f598cf2109a01489b1bdef4023cfda964
-	"scripts": {
-		"build": "tsc -p ./",
-		"compile": "tsc -p ./",
-		"prepare": "npm run build"
-<<<<<<< HEAD
-	}
-=======
-	},
-	"dependencies": {
-		"chalk": "5.x",
-		"commander": "12.1.0",
-		"fflate": "0.8.2",
-		"follow-redirects": "1.15.6",
-		"open": "10.1.0",
-		"prompts": "2.4.2",
-		"simple-git": "3.25.0",
-		"tree-kill": "1.2.2"
-	},
-	"devDependencies": {
-		"@types/follow-redirects": "1.x",
-		"@types/node": "20.x",
-		"@types/prompts": "2.x"
-	},
-	"authors": "microsoft"
->>>>>>> 3a49bb7f598cf2109a01489b1bdef4023cfda964
+    "name": "@vscode/vscode-bisect",
+    "version": "0.4.7",
+    "description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/microsoft/vscode-bisect"
+    },
+    "homepage": "https://github.com/microsoft/vscode-bisect",
+    "keywords": [
+        "vscode"
+    ],
+    "bin": {
+        "vscode-bisect": "bin/vscode-bisect"
+    },
+    "license": "MIT",
+    "authors": "microsoft",
+    "main": "out/index",
+    "scripts": {
+        "compile": "tsc -p ./",
+        "build": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "prepare": "npm run build"
+    },
+    "engines": {
+        "node": ">= 16"
+    },
+    "dependencies": {
+        "@vscode/vscode-perf": "^0.0.15",
+        "chalk": "^4.x",
+        "commander": "^9.4.0",
+        "fflate": "^0.8.2",
+        "follow-redirects": "^1.15.6",
+        "open": "^8.4.0",
+        "prompts": "^2.4.2",
+        "simple-git": "^3.16.0",
+        "tree-kill": "^1.2.2",
+        "vscode-uri": "^3.0.8"
+    },
+    "devDependencies": {
+        "@types/follow-redirects": "^1.x",
+        "@types/node": "20.x",
+        "@types/prompts": "^2.x",
+        "typescript": "5.x"
+    }
 }
