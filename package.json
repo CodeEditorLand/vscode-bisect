@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"authors": "microsoft",
 	"bin": {
 		"vscode-bisect": "bin/vscode-bisect"
@@ -21,9 +22,37 @@
 	},
 	"main": "out/index",
 	"name": "@vscode/vscode-bisect",
+=======
+	"name": "@vscode/vscode-bisect",
+	"description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
+	"main": "out/index",
+	"bin": {
+		"vscode-bisect": "bin/vscode-bisect"
+	},
+>>>>>>> 3a49bb7f598cf2109a01489b1bdef4023cfda964
 	"scripts": {
 		"build": "tsc -p ./",
 		"compile": "tsc -p ./",
 		"prepare": "npm run build"
+<<<<<<< HEAD
 	}
+=======
+	},
+	"dependencies": {
+		"chalk": "5.x",
+		"commander": "12.1.0",
+		"fflate": "0.8.2",
+		"follow-redirects": "1.15.6",
+		"open": "10.1.0",
+		"prompts": "2.4.2",
+		"simple-git": "3.25.0",
+		"tree-kill": "1.2.2"
+	},
+	"devDependencies": {
+		"@types/follow-redirects": "1.x",
+		"@types/node": "20.x",
+		"@types/prompts": "2.x"
+	},
+	"authors": "microsoft"
+>>>>>>> 3a49bb7f598cf2109a01489b1bdef4023cfda964
 }
