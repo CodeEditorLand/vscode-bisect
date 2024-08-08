@@ -16,7 +16,7 @@
 	"description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
 	"devDependencies": {
 		"@types/follow-redirects": "1.14",
-		"@types/node": "22.0",
+		"@types/node": "22.1",
 		"@types/prompts": "2.4"
 	},
 	"main": "out/index",
