@@ -9,7 +9,7 @@ similar to what `git bisect` does.
 
 -   [Node.js](https://nodejs.org/en/) at least `16.x.x`
 
-## Usage
+## 🛠️ Usage
 
 ```sh
 npx @vscode/vscode-bisect [ARGS]
