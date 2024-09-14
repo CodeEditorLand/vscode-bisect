@@ -1,48 +1,31 @@
 {
-    "name": "@vscode/vscode-bisect",
-    "version": "0.5.0",
-    "description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/microsoft/vscode-bisect"
-    },
-    "homepage": "https://github.com/microsoft/vscode-bisect",
-    "keywords": [
-        "vscode"
-    ],
-    "bin": {
-        "vscode-bisect": "bin/vscode-bisect"
-    },
-    "license": "MIT",
-    "authors": "microsoft",
-    "main": "out/index",
-    "scripts": {
-        "compile": "tsc -p ./",
-        "build": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "prepare": "npm run build"
-    },
-    "engines": {
-        "node": ">= 16"
-    },
-    "dependencies": {
-        "@vscode/vscode-perf": "^0.0.15",
-        "chalk": "^4.x",
-        "commander": "^9.4.0",
-        "fflate": "^0.8.2",
-        "follow-redirects": "^1.15.6",
-        "open": "^8.4.0",
-        "progress": "^2.0.3",
-        "prompts": "^2.4.2",
-        "simple-git": "^3.16.0",
-        "tree-kill": "^1.2.2",
-        "vscode-uri": "^3.0.8"
-    },
-    "devDependencies": {
-        "@types/follow-redirects": "^1.x",
-        "@types/node": "20.x",
-        "@types/progress": "^2.0.7",
-        "@types/prompts": "^2.x",
-        "typescript": "5.x"
-    }
+	"authors": "microsoft",
+	"bin": {
+		"vscode-bisect": "bin/vscode-bisect"
+	},
+	"dependencies": {
+		"chalk": "^4.x",
+		"commander": "^9.4.0",
+		"fflate": "^0.8.2",
+		"follow-redirects": "^1.15.6",
+		"open": "^8.4.0",
+		"progress": "^2.0.3",
+		"prompts": "^2.4.2",
+		"simple-git": "^3.16.0",
+		"tree-kill": "^1.2.2"
+	},
+	"description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
+	"devDependencies": {
+		"@types/follow-redirects": "^1.x",
+		"@types/node": "20.x",
+		"@types/progress": "^2.0.7",
+		"@types/prompts": "^2.x"
+	},
+	"main": "out/index",
+	"name": "@vscode/vscode-bisect",
+	"scripts": {
+		"build": "tsc -p ./",
+		"compile": "tsc -p ./",
+		"prepare": "npm run build"
+	}
 }
