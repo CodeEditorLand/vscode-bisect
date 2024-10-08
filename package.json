@@ -26,7 +26,7 @@
         "node": ">= 16"
     },
     "dependencies": {
-        "@vscode/vscode-perf": "^0.0.15",
+        "@vscode/vscode-perf": "^0.0.19",
         "chalk": "^4.x",
         "commander": "^9.4.0",
         "fflate": "^0.8.2",
