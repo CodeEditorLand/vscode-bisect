@@ -3,279 +3,330 @@
  *  Licensed under the MIT License. See LICENSE in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
-import { join } from 'path';
-import { URI } from 'vscode-uri';
-import open from 'open';
-import kill from 'tree-kill';
-import { builds, IBuild } from './builds';
-import { CONFIG, DATA_FOLDER, EXTENSIONS_FOLDER, GIT_VSCODE_FOLDER, LOGGER, DEFAULT_PERFORMANCE_FILE, Platform, platform, Runtime, USER_DATA_FOLDER, VSCODE_DEV_URL } from './constants';
-import { mkdirSync, rmSync } from 'fs';
-import { exists } from './files';
-import chalk from 'chalk';
-import * as perf from '@vscode/vscode-perf';
+import { ChildProcessWithoutNullStreams, spawn } from "child_process";
+import { mkdirSync, rmSync } from "fs";
+import { join } from "path";
+import * as perf from "@vscode/vscode-perf";
+import chalk from "chalk";
+import open from "open";
+import kill from "tree-kill";
+import { URI } from "vscode-uri";
+
+import { builds, IBuild } from "./builds";
+import {
+	CONFIG,
+	DATA_FOLDER,
+	DEFAULT_PERFORMANCE_FILE,
+	EXTENSIONS_FOLDER,
+	GIT_VSCODE_FOLDER,
+	LOGGER,
+	Platform,
+	platform,
+	Runtime,
+	USER_DATA_FOLDER,
+	VSCODE_DEV_URL,
+} from "./constants";
+import { exists } from "./files";
 
 export interface IInstance {
+	/**
+	 * Optional ellapsed time in milliseconds.
+	 * Only available for desktop builds and when
+	 * running with `--perf` command line flag.
+	 */
+	readonly ellapsed?: number;
 
-    /**
-     * Optional ellapsed time in milliseconds.
-     * Only available for desktop builds and when
-     * running with `--perf` command line flag.
-     */
-    readonly ellapsed?: number;
-
-    /**
-     * Stops the instance.
-     */
-    stop(): Promise<unknown>;
+	/**
+	 * Stops the instance.
+	 */
+	stop(): Promise<unknown>;
 }
 
-const NOOP_INSTANCE: IInstance & IWebInstance = { stop: async () => { }, url: '' };
+const NOOP_INSTANCE: IInstance & IWebInstance = {
+	stop: async () => {},
+	url: "",
+};
 
 interface IWebInstance extends IInstance {
-
-    /**
-     * URL to the web instance.
-     */
-    readonly url: string;
+	/**
+	 * URL to the web instance.
+	 */
+	readonly url: string;
 }
 
 class Launcher {
+	private static readonly WEB_AVAILABLE_REGEX = new RegExp(
+		"Web UI available at (http://localhost:8000/?\\?tkn=.+)",
+	);
 
-    private static readonly WEB_AVAILABLE_REGEX = new RegExp('Web UI available at (http://localhost:8000/?\\?tkn=.+)');
+	static {
+		// Recreate user data & extension folder
+		try {
+			rmSync(DATA_FOLDER, { recursive: true });
+		} catch (error) {}
+		mkdirSync(DATA_FOLDER, { recursive: true });
+	}
 
-    static {
+	async launch(
+		build: IBuild,
+		options?: { forceReDownload: boolean },
+	): Promise<IInstance> {
+		// Install (unless web remote)
+		if (build.runtime !== Runtime.WebRemote) {
+			await builds.installBuild(build, options);
+		}
 
-        // Recreate user data & extension folder
-        try {
-            rmSync(DATA_FOLDER, { recursive: true });
-        } catch (error) { }
-        mkdirSync(DATA_FOLDER, { recursive: true });
-    }
+		// Launch according to runtime
+		switch (build.runtime) {
+			// Web (local)
+			case Runtime.WebLocal:
+				if (CONFIG.performance) {
+					console.log(
+						`${chalk.gray("[build]")} starting local web build ${chalk.green(build.commit)} multiple times and measuring performance...`,
+					);
+					return this.runWebPerformance(build);
+				}
 
-    async launch(build: IBuild, options?: { forceReDownload: boolean }): Promise<IInstance> {
+				console.log(
+					`${chalk.gray("[build]")} starting local web build ${chalk.green(build.commit)}...`,
+				);
+				return this.launchLocalWeb(build);
 
-        // Install (unless web remote)
-        if (build.runtime !== Runtime.WebRemote) {
-            await builds.installBuild(build, options);
-        }
+			// Web (remote)
+			case Runtime.WebRemote:
+				if (CONFIG.performance) {
+					console.log(
+						`${chalk.gray("[build]")} opening insiders.vscode.dev ${chalk.green(build.commit)} multiple times and measuring performance...`,
+					);
+					return this.runWebPerformance(build);
+				}
 
-        // Launch according to runtime
-        switch (build.runtime) {
+				console.log(
+					`${chalk.gray("[build]")} opening insiders.vscode.dev ${chalk.green(build.commit)}...`,
+				);
+				return this.launchRemoteWeb(build);
 
-            // Web (local)
-            case Runtime.WebLocal:
-                if (CONFIG.performance) {
-                    console.log(`${chalk.gray('[build]')} starting local web build ${chalk.green(build.commit)} multiple times and measuring performance...`);
-                    return this.runWebPerformance(build);
-                }
+			// Desktop
+			case Runtime.DesktopLocal:
+				if (CONFIG.performance) {
+					console.log(
+						`${chalk.gray("[build]")} starting desktop build ${chalk.green(build.commit)} multiple times and measuring performance...`,
+					);
+					return this.runDesktopPerformance(build);
+				}
 
-                console.log(`${chalk.gray('[build]')} starting local web build ${chalk.green(build.commit)}...`);
-                return this.launchLocalWeb(build);
+				console.log(
+					`${chalk.gray("[build]")} starting desktop build ${chalk.green(build.commit)}...`,
+				);
+				return this.launchElectron(build);
+		}
+	}
 
-            // Web (remote)
-            case Runtime.WebRemote:
-                if (CONFIG.performance) {
-                    console.log(`${chalk.gray('[build]')} opening insiders.vscode.dev ${chalk.green(build.commit)} multiple times and measuring performance...`);
-                    return this.runWebPerformance(build);
-                }
+	private async runDesktopPerformance(build: IBuild): Promise<IInstance> {
+		const executable = await this.getExecutablePath(build);
 
-                console.log(`${chalk.gray('[build]')} opening insiders.vscode.dev ${chalk.green(build.commit)}...`);
-                return this.launchRemoteWeb(build);
+		await perf.run({
+			build: executable,
+			folder: GIT_VSCODE_FOLDER,
+			file: join(GIT_VSCODE_FOLDER, "package.json"),
+			profAppendTimers:
+				typeof CONFIG.performance === "string"
+					? CONFIG.performance
+					: DEFAULT_PERFORMANCE_FILE,
+		});
 
-            // Desktop
-            case Runtime.DesktopLocal:
-                if (CONFIG.performance) {
-                    console.log(`${chalk.gray('[build]')} starting desktop build ${chalk.green(build.commit)} multiple times and measuring performance...`);
-                    return this.runDesktopPerformance(build);
-                }
+		return NOOP_INSTANCE;
+	}
 
-                console.log(`${chalk.gray('[build]')} starting desktop build ${chalk.green(build.commit)}...`);
-                return this.launchElectron(build);
-        }
-    }
+	private async runWebPerformance(build: IBuild): Promise<IInstance> {
+		let url: string;
+		let server: IWebInstance | undefined;
 
-    private async runDesktopPerformance(build: IBuild): Promise<IInstance> {
-        const executable = await this.getExecutablePath(build);
+		// Web local: launch local web server
+		if (build.runtime === Runtime.WebLocal) {
+			server = await this.launchLocalWebServer(build);
+			url = server.url;
+		}
 
-        await perf.run({
-            build: executable,
-            folder: GIT_VSCODE_FOLDER,
-            file: join(GIT_VSCODE_FOLDER, 'package.json'),
-            profAppendTimers: typeof CONFIG.performance === 'string' ? CONFIG.performance : DEFAULT_PERFORMANCE_FILE
-        });
+		// Web remote: use remote URL
+		else {
+			url = VSCODE_DEV_URL(build.commit);
+		}
 
-        return NOOP_INSTANCE;
-    }
+		try {
+			await perf.run({
+				build: url,
+				runtime: "web",
+				token: CONFIG.token,
+				folder:
+					build.runtime === Runtime.WebLocal
+						? URI.file(GIT_VSCODE_FOLDER)
+								.path /* supports Windows & POSIX */
+						: undefined,
+				file:
+					build.runtime === Runtime.WebLocal
+						? URI.file(join(GIT_VSCODE_FOLDER, "package.json"))
+								.with({
+									scheme: "vscode-remote",
+									authority: "localhost:9888",
+								})
+								.toString(true)
+						: undefined,
+				durationMarkersFile:
+					typeof CONFIG.performance === "string"
+						? CONFIG.performance
+						: undefined,
+			});
+		} finally {
+			server?.stop();
+		}
 
-    private async runWebPerformance(build: IBuild): Promise<IInstance> {
-        let url: string;
-        let server: IWebInstance | undefined;
+		return NOOP_INSTANCE;
+	}
 
-        // Web local: launch local web server
-        if (build.runtime === Runtime.WebLocal) {
-            server = await this.launchLocalWebServer(build);
-            url = server.url;
-        }
+	private async launchLocalWeb(build: IBuild): Promise<IInstance> {
+		const instance = await this.launchLocalWebServer(build);
+		if (instance.url) {
+			open(instance.url);
+		}
 
-        // Web remote: use remote URL
-        else {
-            url = VSCODE_DEV_URL(build.commit);
-        }
+		return instance;
+	}
 
-        try {
-            await perf.run({
-                build: url,
-                runtime: 'web',
-                token: CONFIG.token,
-                folder: build.runtime === Runtime.WebLocal ? URI.file(GIT_VSCODE_FOLDER).path /* supports Windows & POSIX */ : undefined,
-                file: build.runtime === Runtime.WebLocal ? URI.file(join(GIT_VSCODE_FOLDER, 'package.json')).with({ scheme: 'vscode-remote', authority: 'localhost:9888' }).toString(true) : undefined,
-                durationMarkersFile: typeof CONFIG.performance === 'string' ? CONFIG.performance : undefined,
-            });
-        } finally {
-            server?.stop();
-        }
+	private async launchLocalWebServer(build: IBuild): Promise<IWebInstance> {
+		const cp = await this.spawnBuild(build);
 
+		async function stop() {
+			return new Promise<void>((resolve, reject) => {
+				const pid = cp.pid!;
+				kill(pid, (error) => {
+					if (error) {
+						try {
+							process.kill(pid, 0);
+						} catch (error) {
+							resolve(); // process doesn't exist anymore... so, all good
+							return;
+						}
 
-        return NOOP_INSTANCE;
-    }
+						reject(error);
+					} else {
+						resolve();
+					}
+				});
+			});
+		}
 
-    private async launchLocalWeb(build: IBuild): Promise<IInstance> {
-        const instance = await this.launchLocalWebServer(build);
-        if (instance.url) {
-            open(instance.url);
-        }
+		return new Promise<IWebInstance>((resolve) => {
+			cp.stdout.on("data", (data) => {
+				if (LOGGER.verbose) {
+					console.log(
+						`${chalk.gray("[server]")}: ${data.toString()}`,
+					);
+				}
 
-        return instance;
-    }
+				const matches = Launcher.WEB_AVAILABLE_REGEX.exec(
+					data.toString(),
+				);
+				const url = matches?.[1];
+				if (url) {
+					resolve({ url, stop });
+				}
+			});
 
-    private async launchLocalWebServer(build: IBuild): Promise<IWebInstance> {
-        const cp = await this.spawnBuild(build);
+			cp.stderr.on("data", (data) => {
+				if (LOGGER.verbose) {
+					console.log(`${chalk.red("[server]")}: ${data.toString()}`);
+				}
+			});
+		});
+	}
 
-        async function stop() {
-            return new Promise<void>((resolve, reject) => {
-                const pid = cp.pid!;
-                kill(pid, error => {
-                    if (error) {
-                        try {
-                            process.kill(pid, 0);
-                        } catch (error) {
-                            resolve();      // process doesn't exist anymore... so, all good
-                            return;
-                        }
+	private async launchRemoteWeb(build: IBuild): Promise<IInstance> {
+		open(VSCODE_DEV_URL(build.commit));
 
-                        reject(error);
-                    } else {
-                        resolve();
-                    }
-                });
-            });
-        }
+		return NOOP_INSTANCE;
+	}
 
-        return new Promise<IWebInstance>(resolve => {
-            cp.stdout.on('data', data => {
-                if (LOGGER.verbose) {
-                    console.log(`${chalk.gray('[server]')}: ${data.toString()}`);
-                }
+	private async launchElectron(build: IBuild): Promise<IInstance> {
+		const cp = await this.spawnBuild(build);
 
-                const matches = Launcher.WEB_AVAILABLE_REGEX.exec(data.toString());
-                const url = matches?.[1];
-                if (url) {
-                    resolve({ url, stop });
-                }
-            });
+		async function stop() {
+			cp.kill();
+		}
 
-            cp.stderr.on('data', data => {
-                if (LOGGER.verbose) {
-                    console.log(`${chalk.red('[server]')}: ${data.toString()}`);
-                }
-            });
-        });
-    }
+		cp.stdout.on("data", (data) => {
+			if (LOGGER.verbose) {
+				console.log(`${chalk.gray("[electron]")}: ${data.toString()}`);
+			}
+		});
 
-    private async launchRemoteWeb(build: IBuild): Promise<IInstance> {
-        open(VSCODE_DEV_URL(build.commit));
+		cp.stderr.on("data", (data) => {
+			if (LOGGER.verbose) {
+				console.log(`${chalk.red("[electron]")}: ${data.toString()}`);
+			}
+		});
 
-        return NOOP_INSTANCE;
-    }
+		return { stop };
+	}
 
-    private async launchElectron(build: IBuild): Promise<IInstance> {
-        const cp = await this.spawnBuild(build);
+	private async spawnBuild(
+		build: IBuild,
+	): Promise<ChildProcessWithoutNullStreams> {
+		const executable = await this.getExecutablePath(build);
+		if (LOGGER.verbose) {
+			console.log(
+				`${chalk.gray("[build]")} starting build via ${chalk.green(executable)}...`,
+			);
+		}
 
-        async function stop() {
-            cp.kill();
-        }
+		const args = [
+			"--accept-server-license-terms",
+			"--extensions-dir",
+			EXTENSIONS_FOLDER,
+			"--skip-release-notes",
+		];
 
-        cp.stdout.on('data', data => {
-            if (LOGGER.verbose) {
-                console.log(`${chalk.gray('[electron]')}: ${data.toString()}`);
-            }
-        });
+		if (build.runtime === Runtime.DesktopLocal) {
+			args.push(
+				"--disable-updates",
+				"--user-data-dir",
+				USER_DATA_FOLDER,
+				"--no-cached-data",
+				"--disable-telemetry", // only disable telemetry when not running performance tests to be able to look at perf marks
+			);
+		}
 
-        cp.stderr.on('data', data => {
-            if (LOGGER.verbose) {
-                console.log(`${chalk.red('[electron]')}: ${data.toString()}`);
-            }
-        });
+		switch (build.runtime) {
+			case Runtime.WebLocal:
+			case Runtime.WebRemote:
+				switch (platform) {
+					case Platform.MacOSX64:
+					case Platform.MacOSArm:
+					case Platform.LinuxX64:
+					case Platform.LinuxArm:
+						return spawn("bash", [executable, ...args]);
+					case Platform.WindowsX64:
+					case Platform.WindowsArm:
+						return spawn(executable, args);
+				}
 
-        return { stop }
-    }
+			case Runtime.DesktopLocal:
+				return spawn(executable, args);
+		}
+	}
 
-    private async spawnBuild(build: IBuild): Promise<ChildProcessWithoutNullStreams> {
-        const executable = await this.getExecutablePath(build);
-        if (LOGGER.verbose) {
-            console.log(`${chalk.gray('[build]')} starting build via ${chalk.green(executable)}...`);
-        }
+	private async getExecutablePath(build: IBuild): Promise<string> {
+		const executable = await builds.getBuildExecutable(build);
 
-        const args = [
-            '--accept-server-license-terms',
-            '--extensions-dir',
-            EXTENSIONS_FOLDER,
-            '--skip-release-notes'
-        ];
+		const executableExists = await exists(executable);
+		if (!executableExists) {
+			throw new Error(
+				`[build] unable to find executable ${executable} on disk. Is the archive corrupt?`,
+			);
+		}
 
-        if (build.runtime === Runtime.DesktopLocal) {
-            args.push(
-
-                '--disable-updates',
-                '--user-data-dir',
-                USER_DATA_FOLDER,
-                '--no-cached-data',
-                '--disable-telemetry' // only disable telemetry when not running performance tests to be able to look at perf marks
-            );
-
-        }
-
-        switch (build.runtime) {
-            case Runtime.WebLocal:
-            case Runtime.WebRemote:
-                switch (platform) {
-                    case Platform.MacOSX64:
-                    case Platform.MacOSArm:
-                    case Platform.LinuxX64:
-                    case Platform.LinuxArm:
-                        return spawn('bash', [executable, ...args]);
-                    case Platform.WindowsX64:
-                    case Platform.WindowsArm:
-                        return spawn(executable, args);
-                }
-
-
-            case Runtime.DesktopLocal:
-                return spawn(executable, args);
-        }
-    }
-
-    private async getExecutablePath(build: IBuild): Promise<string> {
-        const executable = await builds.getBuildExecutable(build);
-
-        const executableExists = await exists(executable);
-        if (!executableExists) {
-            throw new Error(`[build] unable to find executable ${executable} on disk. Is the archive corrupt?`);
-        }
-
-        return executable;
-    }
+		return executable;
+	}
 }
 
 export const launcher = new Launcher();
