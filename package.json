@@ -1,48 +1,48 @@
 {
-    "name": "@vscode/vscode-bisect",
-    "version": "0.5.4",
-    "description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/microsoft/vscode-bisect"
-    },
-    "homepage": "https://github.com/microsoft/vscode-bisect",
-    "keywords": [
-        "vscode"
-    ],
-    "bin": {
-        "vscode-bisect": "bin/vscode-bisect"
-    },
-    "license": "MIT",
-    "authors": "microsoft",
-    "main": "out/index",
-    "scripts": {
-        "compile": "tsc -p ./",
-        "build": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "prepare": "npm run build"
-    },
-    "engines": {
-        "node": ">= 16"
-    },
-    "dependencies": {
-        "@vscode/vscode-perf": "^0.0.19",
-        "chalk": "^5.x",
-        "commander": "^12.1.0",
-        "fflate": "^0.8.2",
-        "follow-redirects": "^1.15.9",
-        "open": "^10.1.0",
-        "progress": "^2.0.3",
-        "prompts": "^2.4.2",
-        "simple-git": "^3.27.0",
-        "tree-kill": "^1.2.2",
-        "vscode-uri": "^3.0.8"
-    },
-    "devDependencies": {
-        "@types/follow-redirects": "^1.x",
-        "@types/node": "22.x",
-        "@types/progress": "^2.0.7",
-        "@types/prompts": "^2.x",
-        "typescript": "5.x"
-    }
+	"name": "@vscode/vscode-bisect",
+	"version": "0.5.4",
+	"description": "Bisect released VS Code Insider builds to find bugs or performance issues similar to what git bisect supports.",
+	"keywords": [
+		"vscode"
+	],
+	"homepage": "https://github.com/microsoft/vscode-bisect",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/microsoft/vscode-bisect"
+	},
+	"license": "MIT",
+	"main": "out/index",
+	"bin": {
+		"vscode-bisect": "bin/vscode-bisect"
+	},
+	"scripts": {
+		"build": "tsc -p ./",
+		"compile": "tsc -p ./",
+		"prepare": "npm run build",
+		"watch": "tsc -watch -p ./"
+	},
+	"dependencies": {
+		"@vscode/vscode-perf": "^0.0.19",
+		"chalk": "^5.x",
+		"commander": "^12.1.0",
+		"fflate": "^0.8.2",
+		"follow-redirects": "^1.15.9",
+		"open": "^10.1.0",
+		"progress": "^2.0.3",
+		"prompts": "^2.4.2",
+		"simple-git": "^3.27.0",
+		"tree-kill": "^1.2.2",
+		"vscode-uri": "^3.0.8"
+	},
+	"devDependencies": {
+		"@types/follow-redirects": "^1.x",
+		"@types/node": "22.x",
+		"@types/progress": "^2.0.7",
+		"@types/prompts": "^2.x",
+		"typescript": "5.x"
+	},
+	"engines": {
+		"node": ">= 16"
+	},
+	"authors": "microsoft"
 }
