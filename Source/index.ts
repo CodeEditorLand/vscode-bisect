@@ -117,6 +117,7 @@ Builds are stored and cached on disk in ${BUILD_FOLDER}
 	if (opts.perf) {
 		if (typeof opts.perf === "string") {
 			CONFIG.performance = resolve(opts.perf);
+
 			if (await exists(CONFIG.performance)) {
 				truncateSync(CONFIG.performance);
 			}
@@ -134,7 +135,9 @@ Builds are stored and cached on disk in ${BUILD_FOLDER}
 	}
 
 	let badCommitOrVersion = opts.bad;
+
 	let goodCommitOrVersion = opts.good;
+
 	if (!opts.commit && !opts.version) {
 		if (!badCommitOrVersion) {
 			const response = await prompts([
@@ -175,6 +178,7 @@ Builds are stored and cached on disk in ${BUILD_FOLDER}
 
 	try {
 		let runtime: Runtime;
+
 		if (opts.runtime === "web") {
 			runtime = Runtime.WebLocal;
 		} else if (opts.runtime === "vscode.dev") {
@@ -184,6 +188,7 @@ Builds are stored and cached on disk in ${BUILD_FOLDER}
 		}
 
 		let commit: string | undefined;
+
 		if (opts.version) {
 			if (!/^\d+\.\d+$/.test(opts.version)) {
 				throw new Error(

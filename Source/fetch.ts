@@ -15,6 +15,7 @@ export function jsonGet<T>(url: string, headers?: OutgoingHttpHeaders): Promise<
         https.get(url, { headers }, res => {
             if (res.statusCode !== 200) {
                 reject(`Failed to get response from update server (code: ${res.statusCode}, message: ${res.statusMessage})`);
+
                 return;
             }
 
@@ -60,3 +61,4 @@ export async function fileGet(url: string, path: string): Promise<void> {
         request.on('error', reject);
     });
 }
+

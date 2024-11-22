@@ -52,6 +52,7 @@ class Builds {
 				goodCommit,
 				allBuilds,
 			);
+
 			if (typeof candidateGoodCommitIndex !== "number") {
 				if (releasedOnly) {
 					throw new Error(
@@ -72,6 +73,7 @@ class Builds {
 
 		if (typeof badCommit === "string") {
 			const candidateBadCommitIndex = this.indexOf(badCommit, allBuilds);
+
 			if (typeof candidateBadCommitIndex !== "number") {
 				if (releasedOnly) {
 					throw new Error(
@@ -109,6 +111,7 @@ class Builds {
 	private indexOf(commit: string, builds: IBuild[]): number | undefined {
 		for (let i = 0; i < builds.length; i++) {
 			const build = builds[i];
+
 			if (build.commit === commit) {
 				return i;
 			}
@@ -125,6 +128,7 @@ class Builds {
 		console.log(
 			`${chalk.gray("[build]")} fetching all builds from ${chalk.green(url)}...`,
 		);
+
 		const commits = await jsonGet<Array<string>>(url);
 
 		return commits.map((commit) => ({ commit, runtime }));
@@ -138,9 +142,11 @@ class Builds {
 					case Platform.MacOSX64:
 					case Platform.MacOSArm:
 						return "server-darwin-web";
+
 					case Platform.LinuxX64:
 					case Platform.LinuxArm:
 						return "server-linux-x64-web";
+
 					case Platform.WindowsX64:
 					case Platform.WindowsArm:
 						return "server-win32-x64-web";
@@ -150,14 +156,19 @@ class Builds {
 				switch (platform) {
 					case Platform.MacOSX64:
 						return "darwin";
+
 					case Platform.MacOSArm:
 						return "darwin-arm64";
+
 					case Platform.LinuxX64:
 						return "linux-x64";
+
 					case Platform.LinuxArm:
 						return "linux-arm64";
+
 					case Platform.WindowsX64:
 						return "win32-x64";
+
 					case Platform.WindowsArm:
 						return "win32-arm64";
 				}
@@ -173,6 +184,7 @@ class Builds {
 		const path = join(getBuildPath(commit), buildName);
 
 		const pathExists = await exists(path);
+
 		if (pathExists && !options?.forceReDownload) {
 			if (LOGGER.verbose) {
 				console.log(
@@ -202,6 +214,7 @@ class Builds {
 
 		// Validate SHA256 Checksum
 		const computedSHA256 = await computeSHA256(path);
+
 		if (expectedSHA256 !== computedSHA256) {
 			throw new Error(
 				`${chalk.gray("[build]")} ${chalk.red("✘")} expected SHA256 checksum (${expectedSHA256}) does not match with download (${computedSHA256})`,
@@ -214,6 +227,7 @@ class Builds {
 
 		// Unzip
 		let destination: string;
+
 		if (
 			(runtime === Runtime.DesktopLocal &&
 				platform === Platform.WindowsX64) ||
@@ -243,12 +257,16 @@ class Builds {
 				switch (platform) {
 					case Platform.MacOSX64:
 						return "vscode-server-darwin-x64-web.zip";
+
 					case Platform.MacOSArm:
 						return "vscode-server-darwin-arm64-web.zip";
+
 					case Platform.LinuxX64:
 						return "vscode-server-linux-arm64-web.tar.gz";
+
 					case Platform.LinuxArm:
 						return "vscode-server-linux-x64-web.tar.gz";
+
 					case Platform.WindowsX64:
 					case Platform.WindowsArm:
 						return "vscode-server-win32-x64-web.zip";
@@ -262,8 +280,10 @@ class Builds {
 				switch (platform) {
 					case Platform.MacOSX64:
 						return "VSCode-darwin.zip";
+
 					case Platform.MacOSArm:
 						return "VSCode-darwin-arm64.zip";
+
 					case Platform.LinuxX64:
 					case Platform.LinuxArm:
 						return (
@@ -293,12 +313,16 @@ class Builds {
 				switch (platform) {
 					case Platform.MacOSX64:
 						return "vscode-server-darwin-x64-web";
+
 					case Platform.MacOSArm:
 						return "vscode-server-darwin-arm64-web";
+
 					case Platform.LinuxX64:
 						return "vscode-server-linux-arm64-web";
+
 					case Platform.LinuxArm:
 						return "vscode-server-linux-x64-web";
+
 					case Platform.WindowsX64:
 					case Platform.WindowsArm:
 						return "vscode-server-win32-x64-web";
@@ -311,10 +335,13 @@ class Builds {
 					case Platform.MacOSX64:
 					case Platform.MacOSArm:
 						return "Visual Studio Code - Insiders.app";
+
 					case Platform.LinuxX64:
 						return "VSCode-linux-x64";
+
 					case Platform.LinuxArm:
 						return "VSCode-linux-arm64";
+
 					case Platform.WindowsX64:
 					case Platform.WindowsArm: {
 						const buildMeta = await this.fetchBuildMeta({
@@ -337,12 +364,16 @@ class Builds {
 				switch (platform) {
 					case Platform.MacOSX64:
 						return "server-darwin-web";
+
 					case Platform.MacOSArm:
 						return "server-darwin-arm64-web";
+
 					case Platform.LinuxX64:
 						return "server-linux-x64-web";
+
 					case Platform.LinuxArm:
 						return "server-linux-arm64-web";
+
 					case Platform.WindowsX64:
 					case Platform.WindowsArm:
 						return "server-win32-x64-web";
@@ -352,14 +383,19 @@ class Builds {
 				switch (platform) {
 					case Platform.MacOSX64:
 						return "darwin";
+
 					case Platform.MacOSArm:
 						return "darwin-arm64";
+
 					case Platform.LinuxX64:
 						return "linux-x64";
+
 					case Platform.LinuxArm:
 						return "linux-arm64";
+
 					case Platform.WindowsX64:
 						return "win32-x64-archive";
+
 					case Platform.WindowsArm: {
 						return "win32-arm64-archive";
 					}
@@ -378,6 +414,7 @@ class Builds {
 
 	async getBuildExecutable({ runtime, commit }: IBuild): Promise<string> {
 		const buildPath = getBuildPath(commit);
+
 		const buildName = await builds.getBuildName({ runtime, commit });
 
 		switch (runtime) {
@@ -393,6 +430,7 @@ class Builds {
 							buildName,
 							"server.sh",
 						);
+
 						if (await exists(oldLocation)) {
 							return oldLocation; // only valid until 1.64.x
 						}
@@ -411,6 +449,7 @@ class Builds {
 							buildName,
 							"server.cmd",
 						);
+
 						if (await exists(oldLocation)) {
 							return oldLocation; // only valid until 1.64.x
 						}
@@ -435,9 +474,11 @@ class Builds {
 							"MacOS",
 							"Electron",
 						);
+
 					case Platform.LinuxX64:
 					case Platform.LinuxArm:
 						return join(buildPath, buildName, "code-insiders");
+
 					case Platform.WindowsX64:
 					case Platform.WindowsArm:
 						return join(

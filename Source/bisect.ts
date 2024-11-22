@@ -49,8 +49,11 @@ class Bisecter {
 		);
 
 		let goodBuild: IBuild | undefined = undefined;
+
 		let badBuild: IBuild | undefined = undefined;
+
 		let build: IBuild;
+
 		let quit = false;
 
 		if (buildsRange.length < 2) {
@@ -65,16 +68,19 @@ class Bisecter {
 		// Go over next builds for as long as we are not done...
 		while ((build = buildsRange[state.currentIndex])) {
 			const response = await this.tryBuild(build);
+
 			if (response === BisectResponse.Bad) {
 				badBuild = build;
 			} else if (response === BisectResponse.Good) {
 				goodBuild = build;
 			} else {
 				quit = true;
+
 				break;
 			}
 
 			const finished = this.nextState(state, response);
+
 			if (finished) {
 				break;
 			}
@@ -108,6 +114,7 @@ class Bisecter {
 			console.log(
 				`${chalk.gray("[build]")} latest insiders build with version ${chalk.green(commitOrVersion)} is ${chalk.green(commit)}.`,
 			);
+
 			return commit;
 		}
 

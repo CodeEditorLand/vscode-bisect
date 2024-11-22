@@ -84,12 +84,14 @@ class Launcher {
 					console.log(
 						`${chalk.gray("[build]")} starting local web build ${chalk.green(build.commit)} multiple times and measuring performance...`,
 					);
+
 					return this.runWebPerformance(build);
 				}
 
 				console.log(
 					`${chalk.gray("[build]")} starting local web build ${chalk.green(build.commit)}...`,
 				);
+
 				return this.launchLocalWeb(build);
 
 			// Web (remote)
@@ -98,12 +100,14 @@ class Launcher {
 					console.log(
 						`${chalk.gray("[build]")} opening insiders.vscode.dev ${chalk.green(build.commit)} multiple times and measuring performance...`,
 					);
+
 					return this.runWebPerformance(build);
 				}
 
 				console.log(
 					`${chalk.gray("[build]")} opening insiders.vscode.dev ${chalk.green(build.commit)}...`,
 				);
+
 				return this.launchRemoteWeb(build);
 
 			// Desktop
@@ -112,12 +116,14 @@ class Launcher {
 					console.log(
 						`${chalk.gray("[build]")} starting desktop build ${chalk.green(build.commit)} multiple times and measuring performance...`,
 					);
+
 					return this.runDesktopPerformance(build);
 				}
 
 				console.log(
 					`${chalk.gray("[build]")} starting desktop build ${chalk.green(build.commit)}...`,
 				);
+
 				return this.launchElectron(build);
 		}
 	}
@@ -140,6 +146,7 @@ class Launcher {
 
 	private async runWebPerformance(build: IBuild): Promise<IInstance> {
 		let url: string;
+
 		let server: IWebInstance | undefined;
 
 		// Web local: launch local web server
@@ -186,6 +193,7 @@ class Launcher {
 
 	private async launchLocalWeb(build: IBuild): Promise<IInstance> {
 		const instance = await this.launchLocalWebServer(build);
+
 		if (instance.url) {
 			open(instance.url);
 		}
@@ -227,7 +235,9 @@ class Launcher {
 				const matches = Launcher.WEB_AVAILABLE_REGEX.exec(
 					data.toString(),
 				);
+
 				const url = matches?.[1];
+
 				if (url) {
 					resolve({ url, stop });
 				}
@@ -273,6 +283,7 @@ class Launcher {
 		build: IBuild,
 	): Promise<ChildProcessWithoutNullStreams> {
 		const executable = await this.getExecutablePath(build);
+
 		if (LOGGER.verbose) {
 			console.log(
 				`${chalk.gray("[build]")} starting build via ${chalk.green(executable)}...`,
@@ -305,6 +316,7 @@ class Launcher {
 					case Platform.LinuxX64:
 					case Platform.LinuxArm:
 						return spawn("bash", [executable, ...args]);
+
 					case Platform.WindowsX64:
 					case Platform.WindowsArm:
 						return spawn(executable, args);
@@ -319,6 +331,7 @@ class Launcher {
 		const executable = await builds.getBuildExecutable(build);
 
 		const executableExists = await exists(executable);
+
 		if (!executableExists) {
 			throw new Error(
 				`[build] unable to find executable ${executable} on disk. Is the archive corrupt?`,

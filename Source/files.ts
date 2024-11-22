@@ -41,6 +41,7 @@ export async function unzip(
 			platform === Platform.WindowsArm
 		) {
 			const unzipped = unzipSync(readFileSync(source));
+
 			for (const entry of Object.keys(unzipped)) {
 				if (entry.endsWith("/")) {
 					mkdirSync(join(destination, entry), { recursive: true });

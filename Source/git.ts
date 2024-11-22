@@ -16,6 +16,7 @@ class Git {
 	}
 
 	private _whenReady: Promise<void> | undefined = undefined;
+
 	get whenReady(): Promise<void> {
 		if (!this._whenReady) {
 			this._whenReady = this.init();
