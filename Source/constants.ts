@@ -12,17 +12,23 @@ export const ROOT = join(tmpdir(), "vscode-bisect");
 export const BUILD_FOLDER = join(ROOT, ".builds");
 
 export const DATA_FOLDER = join(ROOT, ".data");
+
 export const USER_DATA_FOLDER = join(DATA_FOLDER, "data");
+
 export const EXTENSIONS_FOLDER = join(DATA_FOLDER, "extensions");
 
 export const GIT_FOLDER = join(ROOT, "git");
+
 export const GIT_VSCODE_FOLDER = join(GIT_FOLDER, "vscode");
+
 export const GIT_REPO = "https://github.com/microsoft/vscode.git";
 
 export const STORAGE_FILE = join(ROOT, "storage.json");
 
 export const DEFAULT_PERFORMANCE_FILE = join(ROOT, "startup-perf.txt");
+
 export const PERFORMANCE_RUNS = 10;
+
 export const PERFORMANCE_RUN_TIMEOUT = 60000;
 
 export const VSCODE_DEV_URL = function (commit: string) {
