@@ -64,6 +64,7 @@ class Launcher {
 		try {
 			rmSync(DATA_FOLDER, { recursive: true });
 		} catch (error) {}
+
 		mkdirSync(DATA_FOLDER, { recursive: true });
 	}
 
@@ -152,6 +153,7 @@ class Launcher {
 		// Web local: launch local web server
 		if (build.runtime === Runtime.WebLocal) {
 			server = await this.launchLocalWebServer(build);
+
 			url = server.url;
 		}
 
@@ -207,6 +209,7 @@ class Launcher {
 		async function stop() {
 			return new Promise<void>((resolve, reject) => {
 				const pid = cp.pid!;
+
 				kill(pid, (error) => {
 					if (error) {
 						try {

@@ -26,14 +26,23 @@ import { launcher } from "./launcher";
 module.exports = async function (argv: string[]): Promise<void> {
 	interface Opts {
 		runtime?: "web" | "desktop" | "vscode.dev";
+
 		good?: string;
+
 		bad?: string;
+
 		commit?: string;
+
 		version?: string;
+
 		releasedOnly?: boolean;
+
 		verbose?: boolean;
+
 		reset?: boolean;
+
 		perf?: boolean | string;
+
 		token?: string;
 	}
 
@@ -110,6 +119,7 @@ Builds are stored and cached on disk in ${BUILD_FOLDER}
 			console.log(
 				`${chalk.gray("[build]")} deleting cache directory ${chalk.green(ROOT)}`,
 			);
+
 			rmSync(ROOT, { recursive: true });
 		} catch (error) {}
 	}
@@ -200,6 +210,7 @@ Builds are stored and cached on disk in ${BUILD_FOLDER}
 				runtime,
 				opts.version,
 			);
+
 			commit = build.commit;
 		} else if (opts.commit) {
 			if (opts.commit === "latest") {
@@ -209,6 +220,7 @@ Builds are stored and cached on disk in ${BUILD_FOLDER}
 					undefined,
 					opts.releasedOnly,
 				);
+
 				commit = allBuilds[0].commit;
 			} else {
 				commit = opts.commit;
@@ -231,7 +243,9 @@ Builds are stored and cached on disk in ${BUILD_FOLDER}
 		}
 	} catch (error) {
 		console.log(`${chalk.red("\n[error]")} ${error}`);
+
 		logTroubleshoot();
+
 		process.exit(1);
 	}
 };

@@ -19,6 +19,7 @@ enum BisectResponse {
 
 interface IBisectState {
 	currentChunk: number;
+
 	currentIndex: number;
 }
 
@@ -63,6 +64,7 @@ class Bisecter {
 		// Start bisecting via binary search
 
 		const state = { currentChunk: buildsRange.length, currentIndex: 0 };
+
 		this.nextState(state, BisectResponse.Bad /* try older */);
 
 		// Go over next builds for as long as we are not done...
@@ -111,6 +113,7 @@ class Bisecter {
 			const commit = (
 				await builds.fetchBuildByVersion(runtime, commitOrVersion)
 			).commit;
+
 			console.log(
 				`${chalk.gray("[build]")} latest insiders build with version ${chalk.green(commitOrVersion)} is ${chalk.green(commit)}.`,
 			);
@@ -182,6 +185,7 @@ ${chalk.green(`git bisect start && git bisect bad ${badBuild.commit} && git bise
 		// Binary search is not done
 		else {
 			state.currentChunk = Math.round(state.currentChunk / 2);
+
 			state.currentIndex =
 				response === BisectResponse.Good
 					? state.currentIndex - state.currentChunk /* try newer */

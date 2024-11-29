@@ -13,13 +13,17 @@ import { computeSHA256, exists, getBuildPath, unzip } from "./files";
 
 export interface IBuild {
 	readonly runtime: Runtime;
+
 	readonly commit: string;
 }
 
 interface IBuildMetadata {
 	readonly url: string;
+
 	readonly version: string;
+
 	readonly productVersion: string;
+
 	readonly sha256hash: string;
 }
 
@@ -125,6 +129,7 @@ class Builds {
 		releasedOnly = false,
 	): Promise<IBuild[]> {
 		const url = `https://update.code.visualstudio.com/api/commits/insider/${this.getBuildApiName(runtime)}?released=${releasedOnly}`;
+
 		console.log(
 			`${chalk.gray("[build]")} fetching all builds from ${chalk.green(url)}...`,
 		);
@@ -199,6 +204,7 @@ class Builds {
 			console.log(
 				`${chalk.gray("[build]")} deleting ${chalk.green(getBuildPath(commit))} and retrying download`,
 			);
+
 			rmSync(getBuildPath(commit), { recursive: true });
 		}
 
@@ -207,9 +213,11 @@ class Builds {
 			runtime,
 			commit,
 		});
+
 		console.log(
 			`${chalk.gray("[build]")} downloading build from ${chalk.green(url)}...`,
 		);
+
 		await fileGet(url, path);
 
 		// Validate SHA256 Checksum
@@ -239,9 +247,11 @@ class Builds {
 			// zip contains a single top level folder to use
 			destination = dirname(path);
 		}
+
 		console.log(
 			`${chalk.gray("[build]")} unzipping build to ${chalk.green(destination)}...`,
 		);
+
 		await unzip(path, destination);
 	}
 
@@ -442,6 +452,7 @@ class Builds {
 							"code-server-insiders",
 						);
 					}
+
 					case Platform.WindowsX64:
 					case Platform.WindowsArm: {
 						const oldLocation = join(

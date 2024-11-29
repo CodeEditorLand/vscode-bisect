@@ -27,7 +27,9 @@ export function jsonGet<T>(
 			let data = "";
 
 			res.on("data", (chunk) => (data += chunk));
+
 			res.on("end", () => resolve(JSON.parse(data)));
+
 			res.on("error", (err) => reject(err));
 		});
 	});
@@ -54,7 +56,9 @@ export async function fileGet(url: string, path: string): Promise<void> {
 			);
 
 			const outStream = createWriteStream(path);
+
 			outStream.on("close", () => resolve());
+
 			outStream.on("error", reject);
 
 			res.on("data", (chunk) => {
@@ -62,6 +66,7 @@ export async function fileGet(url: string, path: string): Promise<void> {
 			});
 
 			res.on("error", reject);
+
 			res.pipe(outStream);
 		});
 

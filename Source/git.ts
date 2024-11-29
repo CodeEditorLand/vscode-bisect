@@ -33,7 +33,9 @@ class Git {
 			);
 
 			const git = simpleGit({ baseDir: GIT_VSCODE_FOLDER });
+
 			await git.checkout("main");
+
 			await git.pull();
 		}
 
@@ -44,6 +46,7 @@ class Git {
 			);
 
 			const git = simpleGit();
+
 			await git.clone(GIT_REPO, GIT_VSCODE_FOLDER);
 		}
 	}
