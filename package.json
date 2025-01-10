@@ -11,21 +11,21 @@
 		"prepare": "npm run build"
 	},
 	"dependencies": {
-		"chalk": "^5.x",
-		"commander": "^13.0.0",
-		"fflate": "^0.8.2",
-		"follow-redirects": "^1.15.9",
-		"open": "^10.1.0",
-		"progress": "^2.0.3",
-		"prompts": "^2.4.2",
-		"simple-git": "^3.27.0",
-		"tree-kill": "^1.2.2"
+		"chalk": "5.x",
+		"commander": "13.0.0",
+		"fflate": "0.8.2",
+		"follow-redirects": "1.15.9",
+		"open": "10.1.0",
+		"progress": "2.0.3",
+		"prompts": "2.4.2",
+		"simple-git": "3.27.0",
+		"tree-kill": "1.2.2"
 	},
 	"devDependencies": {
-		"@types/follow-redirects": "^1.x",
+		"@types/follow-redirects": "1.x",
 		"@types/node": "22.x",
-		"@types/progress": "^2.0.7",
-		"@types/prompts": "^2.x"
+		"@types/progress": "2.0.7",
+		"@types/prompts": "2.x"
 	},
 	"authors": "microsoft"
 }
